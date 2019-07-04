@@ -1,6 +1,6 @@
 # database_note
 
-## 数据库基础语法
+## 数据库初始化语法
 
 ### use mongo
 
@@ -26,14 +26,18 @@
 
 ----------
 
-### db.mongo.insert( {"aaa":"bbb"} )
-
-插入数据
-
-----------
-
 ### use databaseA  switched to db databaseB
 
 切换数据库
+
+----------
+
+### db.collection.drop()  
+
+删除集合
+
+----------
+
+## 插入文档
 
 ----------
