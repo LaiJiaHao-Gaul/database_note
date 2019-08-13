@@ -367,16 +367,25 @@ Query OK, 0 rows affected(0.20 sec)
 （2）使用 CREATE TABLE 语句创建索引
 索引可以在创建表的同时一起被创建。具体使用方法时，可在 CREATE TABLE 语句语法中的表创建定义（create difinition）部分添加以下语法成分中的某一项或几项：
 1、语法项[CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在创建新表的同时创建该表的主键；
+
 2、语法项{INDEX|KEY} [index_name] (index_col_name,...),用于表示在创建信标的同时创建该表的索引。
+
 3、语法项[CONSTRAINT [symbol]] UNIQUE [INDEX|KEY] [index_name] (index_col_name,...),用于表示在创建新表的同时创建该表的唯一性索引。
+
 4、语法项[CONSTRAINT[symbol]]FOREIGN KEY [index_name] (index_col_name,...),用于表示在创建新表的同时创建该表的外键。
 
 第三种创建索引的方法
+
 （3）使用ALTER TABLE语句创建索引
+
 ALTER在修改表的同时，可以向已有的表中添加索引。具体使用方法时，可在ALTER TABLE语句语法中添加以下语法成分中的某一项或几项。
+
 1、语法项 ADD {INDEX | KEY} [index_name] (index_col_name,...)用于表示在修改表的同时为该表添加索引；
+
 2、语法项 ADD [CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在修改表的同时为该表添加主键(ADD PRIMARY KEY(index_col_name,...))
+
 3、语法项 ADD [CONSTRAINT [symbol]]UNIQUE [INDEX|KEY] [index_name] (index_col_name,..),用于表示在修改表的同时为该表添加外键。
+
 4、语法项 ADD [CONSTRAINT [symbol]]FOREIGN KEY [index_ name] (index_col_name,...), 用于表示在修改表的同时为该表添加外键。
 
 例： 使用 ALTER TABLE 语句在数据库 mysql_test 中表 seller 的姓名列上添加一个非唯一的索引，取名为 index_seller_name 。
@@ -393,6 +402,7 @@ mysql> ALTER TABLE mysql_test.seller
 #### SHOW INDEX 语句
 
 格式：
+
 ```MySQL
 SHOW {INDEX|INDEXES|KEYS}
     {FROM|IN}tb1_name
