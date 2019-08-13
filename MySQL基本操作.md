@@ -5,24 +5,31 @@
 数据库模式的定义包括数据库的创建、选择、修改、删除、查看等操作。
 
 “ [ ] ”
+
 标示内容为可选项，也就是可省略的。
 
 “ | ”
+
 表示可任选其中一项来与花括号外的语法成分共同组成 SQL 语句命令，意为 或。
 
 “ db_name ”
+
 标识数据库名 在MySQL中不区分大小写。
 
 “ DEFAULT ” 关键字
+
 指定默认值
 
 “ CHARACTER SET” 关键字
+
 指定数据库字符集（Charset）
 
 “ COLLATE ” 关键字
+
 指定字符集的校对规则
 
 “ IF NOT EXISTS ” 关键字
+
 用于在创建数据库钱进行判断，只有该数据库目前尚不存在时才执行 CREATE DATABASE 操作，可避免数据库存在而再次新建的错误。
 
 ### 1.创建数据库
@@ -44,8 +51,7 @@ mysql> CREATE DATABASE nunuDB;
 Query OK,1 row effected(0.01 sec)
 ```
 
-如果再次使用一样的操作创建同一个数据库，则会报错，
-但加上IF NOT EXISTS则可避免错误的发生。
+如果再次使用一样的操作创建同一个数据库，则会报错，但加上IF NOT EXISTS则可避免错误的发生。
 
 ### 2.选择数据库
 
@@ -159,14 +165,19 @@ Query OK, 0 orws affexted(0.01 sec)
 #### TEMPORARY 关键字 临时表
 
 使用该关键字则创建临时表，不使用则创建持久表
+
 临时表和持久表的区别在于临时表的生命周期较短，而且只能对创建它的用户可见，当断开与该数据库的连接时，MySQL会自动删除临时表，这意味着两个不同的连接可以使用相同的临时表名称，不会冲突，也不会与同名的非临时表冲突。
 
 ### 数据类型
 
 MySQL中主要的数据类型包括：
+
 数值类型： 整型int、浮点型double、 布尔型bool。
+
 日期和时间类型： 日期型data、时间戳timestamp、时间型time。
+
 字符串类型： 定长字符串类型char、可变长字符类型varchar。
+
 空间数据类型等。
 
 #### AUTO_INCREMENT 关键字 自增属性
@@ -180,11 +191,14 @@ MySQL中主要的数据类型包括：
 #### DEFAULT 关键字
 
 这个关键字是在 CREATE TABLE 语句的列定义中的。
+
 如果没有为列指定默认值，MySQL会自动地为其分配一个。如果该列可以去NULL值，则默认值为NULL，而如果该列被设置为NOT NULL，则默认值取决于该列的类型：对于没有声明 AUTO_INCREMENT 属性的数字类型，默认值是 0 ；对于一个AUTO_INCREMENT列，默认值是在顺序中的下一个值；对于除 TIMESTAMP 以外的日期和时间类型，默认值是该类型适当的“零”值；对于表中第一个TIMESTAMP，默认值是当前的日期和时间。
 
 #### NULL 关键字
 
-在MySQL中，每个列要么是NULL列，要么是NOT NULL列，这种状态在创建时由表的定义所规定。NULL为默认设置，如果不指定NOT NULL，则认为指定的是NULL.
+在MySQL中，每个列要么是NULL列，要么是NOT NULL列，这种状态在创建时由表的定义所规定。
+
+NULL为默认设置，如果不指定NOT NULL，则认为指定的是NULL.
 
 注意：**NULL!=''**
 
@@ -210,6 +224,7 @@ mysql> ALTER TABLE nunuDB.try
 #### CHANGE [COLUMN] 子句
 
 如果需要修改表中列的名称或数据类型，可在 ALTER TABLE 语句中添加 CHANGE[COLUMN] 子句。
+
 CHANGE[COLUMN]子句可同时修改表中指定列的名称和数据类型，且在ALTER TABLE 语句中可以同时放入多个CHANGE [COLUMN] 子句，只需彼此间用逗号分隔。
 
 例：
