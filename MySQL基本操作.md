@@ -323,7 +323,9 @@ mysql> DESC nunuDB.try;
 三种方式创建索引：
 
 （1）使用CREATE INDEX 语句创建索引
+
 可以使用专门用与创建索引的 CREATE INDEX 语句在一个已有的表上创建索引，但该语句不能创建主键。
+
 语法：
 
 ```MySQL
@@ -338,14 +340,21 @@ col_name [(length)[ASC|DESC]]
 ```
 
 可选项 “UNIQUE” 关键字用于指定创建唯一性索引
+
 “index_name”用于指定索引名。
+
 注意：**一个表可以创建多个索引，但每个索引在该表中的名称必须是唯一的；**
+
 tb1_name 用于指定要建立索引的表名，
+
 index_col_name 是关于索引列的描述。
 
 关于索引的描述可包含三个语法要素：
+
 col_name指定要创建索引的列名，通常可考虑将查询语句中在 WHERE 子句和 JION 子句里出现的列来作为索引列；
+
 可选项“length”，用于指定使用列的前 length 个字符来创建索引，使用列的一部分创建索引有利于减小索引文件的大小，节省磁盘空间；
+
 关键字“ASC”或“DESC”是可选项，用于指定索引按升序（ASC）还是降序（DESC）来排列，默认时为ASC。
 
 例：在数据库 mysql_test 的表 customers 上，根据客户姓名列的前三个字符创建一个升序索引 index_customers。
@@ -364,8 +373,11 @@ Query OK, 0 rows affected(0.20 sec)
 ```
 
 第二种创建索引的方法：
+
 （2）使用 CREATE TABLE 语句创建索引
+
 索引可以在创建表的同时一起被创建。具体使用方法时，可在 CREATE TABLE 语句语法中的表创建定义（create difinition）部分添加以下语法成分中的某一项或几项：
+
 1、语法项[CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在创建新表的同时创建该表的主键；
 
 2、语法项{INDEX|KEY} [index_name] (index_col_name,...),用于表示在创建信标的同时创建该表的索引。
@@ -423,10 +435,15 @@ DROP INDEX index_name ON tb1_name
 ```
 
 第二种删除索引的方法：
+
 使用 ALTER TABLE 语句删除索引
+
 ALTER TABLE 语句也可以用于对索引的删除，使用方法是，在 ALTER TABLE 语句中指定以下子句中的某一项：
+
 i)选用 DROP PRIMARY KEY 子句用于删除表中的主键，由于一个表中只有一个主键，其也是一个索引；
+
 ii)选用 DROP INDEX 子句用于删除各种类型的索引；
+
 iii)选用 DROP FOREIGN KEY 子句用于删除外键。
 
 例： 使用 ALTER TABLE 语句删除数据库 mysql_test 中表 customers 的主键和索引 index_customers。
