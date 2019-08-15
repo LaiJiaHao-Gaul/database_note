@@ -468,3 +468,334 @@ mysql>ALTER TABLE mysql_test.customers
     ->  DROP PRIMARY KEY,
     ->  DROP INDEX index_customers;
 ```
+
+## 四、数据更新
+
+### 插入数据
+
+#### INSERT 语句
+
+向数据库中一个已有的表插入一行或多行元组数据。
+
+INSERT 语句有三种语法形式，分别对应的是：
+
+INSERT ... VALUES 语句
+
+INSERT ... SET 语句
+
+INSERT ... SELECT 语句
+
+在 MySQL 中，使用 INSERT...VALUES 语句插入单行或多行元组数据的语法格式是：
+
+```MySQL
+INSERT [INTO] tb1_name [(col_name,...)]
+    {VALUES|VALUE} ({expr|DEFAULT},...),(...),...
+```
+
+此语法中：
+
+tb1_name 指定欲被插入数据的表名。
+
+col_name 指定需要插入数据的列名。如果向表中所有列插入数据，则全部列名都可以省略
+
+对于没有指定数据的列，它们的值可根据列的默认值或相关属性来确定，通常MySQL是按照以下原则进行的：
+
+i)对于具有标志（IDENTITY）属性的列，系统会自动生成序号之来唯一标志该列；
+
+ii)具有默认值的列，其值可通过在 INSERT 语句中指定关键字“DEFAULT”将其设为默认值；
+
+iii)没有默认值的列，若允许为空值，则其值可通过在 INSERT 语句中指定关键字“NULL”将其设为空值，若不允许为空值，则INSERT语句执行出错；
+
+iv)对于类型为 TIMESTAMP 的列，系统会为其自动赋值；
+
+v)由于 AUTO_ INCREMENT 属性列的值是在表中其他列被赋值之后生成的，所以在对表中其他列做任何赋值操作（如 INSERT 语句）时，对该AUTO_INCREMENT 属性列的引用只会返回数字 0。
+
+3）通过关键字“VALUES”或“VALUE”引导的子句，其包含各列需要插入的数据清单。数据清单中数据的顺序必须与列的顺序相对应，同时该子句中的值可以是：
+
+i）“expr”，表示一个常量、变量或一个表达式，也可以是空值NULL，其值的数据类型要与列的数据类型一只，如果表达式的类型与列值不匹配，会造成类型转换或插入语句出错，另外当列值为字符型时，需要用单引号括起；
+
+ii）关键字“DEFAULT”，即用于指定此列值为该列的默认值，前提时该列之前已经明确指定了默认值，否则插入语句会报错。
+
+例：使用 INSERT ... VALUES 语句相数据库 nunuDB 的表 user 中插入数据：
+
+user_name = nunu
+
+user_age = 18
+
+user_sex = 0
+
+则MySQL输入如下：
+
+```MySQL
+mysql> INSERT nunuDB.user(user_name,user_age,user_sex)
+    -> VALUES('nunu',18,1)
+```
+
+第三个插入数据的方法会更加**灵活且常用**
+
+#### INSERT...SELECT
+
+语法格式：
+
+```MySQL
+INSERT tb1_name [(col_name,...)]
+SELECT ...
+```
+
+在此语法中，SELECT 子句用于快速地从一个或多个表中取出数据，并将这些数据作为行数据插入到另一个表中，SELECT 子句返回地时一个查询到的结果集，INSERT语句将这个结果集插入到指定表中，其中结果集里每行数据的字段数、字段的数据类型必须与被操作的表完全一致。
+
+### 删除数据
+
+#### DELETE 语句
+
+语法格式：
+
+```MySQL
+DELETE FROM tb1_name
+    [WHERE where_condition]
+    [ORDER BY ...]
+    [LIMIT row_count]
+```
+
+在此语法中：“tb1_name”指定要删除数据的表明；可选项 WHERE 子句表示为删除操作限定删除条件，从而删除特定的行，若省略 WHERE 子句，则表示删除该表中的所有行，但表的定义仍在数据字典中，即 DELETE 语句删除的时表中的数据，而不是关于表的定义； 可选项 ORDER BY 子句表示各行将按照子句中指定的顺序进行删除；可选项 LIMIT 子句用于告知服务器在控制民工被返回到客户端前被删除的行的最大值。
+
+例：使用DELETE语句删除数据库 nunuDB 的表 user 中客户名为 "nunu" 的客户信息。
+
+```MySQL
+mysql> DELETE FROM nunuDB.user
+    ->      WHERE user_name = 'nunu'
+```
+
+### 修改数据
+
+在MySQL中，可以使用 UPDATE 语句来修改更新一个表中的数据，实现对表中行的列数据进行修改，其语法格式是：
+
+```MySQL
+UPDATE tb1_name
+    SET col_name1={expr1|DEFAULT}[,col_name2={expr2|DEFAULT}] ...
+    [WHERE where_condition]
+    [ORDER BY ...]
+    [LIMIT row_count]
+```
+
+在此语法中：
+
+“tb1_name"指定要修改的表的名称；
+
+SET 子句用于指定表中要修改的列名及其列值，其中每个指定的列值可以是表达式，也可以是该列所对应的默认值，如果指定的是默认值，则用关键字”DEFAULT“表示列值；可选项 WHERE 子句用于限定表中要修改的行，若不指定此子句，则 UPDATE 语句会修改表中所有的行；可选项 WHERE 子句用于限定表中要修改的行，若不指定此子句，则 UPDATE 语句会修改表中所有的行；可选项 ORDER BY 子句用于限定表中的行被修改的次序；可选项LIMIT子句用于限定被修改的行数。
+
+例： 使用 UPDATE 语句将数据库 nunuDB 的表 user 中姓名为 ljh 的客户的年龄更新为23.
+
+命令行输入如下：
+
+```MySQL
+mysql>UPDATE nunuDB.user
+    ->SET user_age = 23
+    ->WHERE user_name = 'ljh';
+```
+
+注意：使用 UPDATE 语句可同时修改数据行的多个列值，只需其彼此间用逗号分隔即可；如若删除表中某个列的值，在允许该列为空值的前提下，可将它设置为NULL来实现。
+
+## 五、数据查询
+
+### SELECT语句
+
+SELECT语句的语法格式：
+
+```MySQL
+SELECT
+[ ALL | DSITINCT | DISTINCTROW ]
+select_expr[,select_expr]
+FROM table_references
+[WHERE where_condition]
+[GROUP BY {col_name | expr | position }
+[ASC|DESC], ... [WITH ROLLUP]]
+[HAVING where_condition]
+[ORDER BY { col_name | expr | position }
+    [ASC | DESC],...]
+[LIMIT {[offset,] row_count|row_count OFFSET offset}]
+```
+
+在此语法结构中：
+
+SELECT 子句用于指定输出的字段；
+
+FROM 子句用于指定数据的来源
+
+WHERE 子句用于指定组的选择条件
+
+GROUP BY 子句用于对检索到的记录进行分组
+
+HAVING 子句用于指定组的选择条件
+
+ORDER BY 子句用于对查询的结果进行排序。
+
+以上子句中，SELECT 子句和 FROM 子句是必需的，其他子句都是可选的，并且在 SELECT 语句的使用中，所有被添加选用的子句必须依照SELECT语句的语法格式所罗列的顺序来使用，
+
+子句|说明|是否必须使用
+---|:--:|---:
+SELECT|要返回的列或表达式|是
+FROM  |从中检索数据的表|仅在从表选择数据时使用
+WHERE |行级过滤       | 否
+GROUP BY |分组说明    | 仅在按组计算聚合时使用
+HAVING|组级过滤       | 否
+ORDER BY |输出排序顺序| 否
+LIMIT | 要检索的行数  |否
+
+在SELECT语句的语法结构中，三个关键字“ALL”“DISTINCT”“DISTINC TROW”为可选项，用于指定是否应返回结果集里的重复行。若没有指定则为ALL，即SELECT操作中所有匹配的行，包括可能存在的重复行，都将被返回；若指定DISTINCT或DISTINCETROW，则会消除结果集里的重复行，其中 DISTINT 或 DISTINCETROW 为同义词，且这两个关键字应用于 SELECT 语句中所指定的所有列，而不仅仅是前置某个列。
+
+在SELECT语句中，语法项 “select_expr” 主要用于指定需要查询的内容，指定方法有如下几种：
+
+#### 1.选择指定的列
+
+查询多个时，列名之间用逗号分隔，查询结果返回时，结果集里各列的次序是按照SELECT语句中指定列的次序给出的；
+
+查询一个表中的所有列，则用*号通配符，结果集里各列的次序是按照这些列在表定义中出现的次序。
+
+列名的指定可以采用直接给出该列的名称的方式，也可以使用完全限定的列名方式，如“user.user_name”的列名格式
+
+例：查询数据库 nunuDB 的表 user 中各个客户的姓名、性别和年龄。
+
+```MySQL
+mysql> SELECT user_name,user_sex,user_age
+    -> FROM nunuDB.user;
+```
+
+例：查询数据库 nunuDB 的表 user 中各个客户的所有信息。
+
+```MySQL
+mysql> SELECT *
+    -> FROM nunuDB.user
+```
+
+#### 2.定义并使用列的别名 AS
+
+语法格式：
+
+```MySQL
+column_name [AS] 别名
+```
+
+例如：查询数据库 nunuDB 的表 user 中客户的 user_name、user_sex、user_age，要求将结果集的user_name列 的名称使用别名“姓名”替代。
+
+```MySQL
+mysql> SELECT user_name AS 姓名,user_sex,user_age
+    -> FROM nunuDB.user
+```
+
+#### 3.替换查询结果集里的数据 CASE
+
+在对表进行查询时，若希望得到对某些列的查询分析结果，而不是由查询得到的原始具体数据，则可以在SELECT语句中替换这些列，其中需要用到CASE表达式。
+
+语法格式：
+
+```MySQL
+CASE
+WHEN 条件1 THEN 表达式1
+WHEN 条件2 THEN 表达式2
+...
+ELSE 表达式
+END [AS] column_alias
+```
+
+例：查询数据库 nunuDB 的表 user 中客户的 user_name 列 和 user_sex 列，要求判断结果集里 user_sex 列的值，如果该列的值为 1，则显示输出“男”，否则为“女”，同时在结果集里的显示中将user_sex列用别名“性别”标注。
+
+```MySQL
+mysql> SELECT user_name 姓名,
+    -> CASE
+    -> WHEN user_sex = 1 THEN '男'
+    -> ELSE '女'
+    -> END 性别
+    -> FROM nunuDB.user;
+```
+
+#### 4.计算列值
+
+使用 SELECT 语句对列进行查询时，在结果集里可以输出对列值计算后的值。
+其具体使用方法是：将 SELECT 语句的语法项“select_expr”指定为对应列参与计算的表达式。
+
+例： 查询数据库 nunuDB 的表 user 中 每个客户的 user_name 列、user_sex 列，以及对user_id列加上数字100后的值。
+
+```MySQL
+mysql> SELECT user_id + 100 用户ID,user_name 姓名,user_sex 性别，
+    -> FROM nunuDB.user;
+```
+
+5.聚合函数
+
+SELECT 语句的语法项“select_expr”也可以指定为聚合函数。
+
+聚合函数通常是数据库系统中一类内置函数，常用于对一组值进行计算，然后返回单个值。
+
+它通常与 GROUP BY 子句一起使用。
+
+如果 SELECT 语句中有一个 GROUP BY 子句，则这个聚合函数对所有列起作用。
+
+如果没有，则SELECT语句只产生一行作为结果。另外，除COUNT函数外聚合函数都会忽略空值。
+
+以下是一些常用的聚合函数
+
+函数名|说明
+---|:--:|
+COUNT|求组中项数，返回INT类型整数
+MAX |求最大值
+MIN |求最小值
+SUM |返回表达式中所有值的和
+AVG |求组中值的平均值
+STD或STDDEV |返回给定表达式中所有值的标准值
+VARIANCE| 返回给定表达式中所有值得方差
+GROUP_CONCAT | 返回由属于一组得列值连接组合而成的结果
+BIT_AND | 逻辑或
+BIR_OR | 逻辑与
+BIT_XOR | 逻辑异或
+
+### 三、FROM 子句与多表连接查询
+
+SELECT 语句的查询对象是由 FROM 子句指定的，其可根据用户的查询需求实现单表或多表查询。
+
+之前的表查询都是针对一个表进行的，但在实际查询中往往需要从多个表中获取信息，此时的查询就会设计多张表。
+
+若一个查询同时涉及两个或两个以上的表，则称之为多表连接查询，也称多表查询或连接查询。
+
+#### 为什么要用多表连接查询？
+
+在关系数据库的设计中，为了**减少数据的冗余**，以及**增强数据库的稳定性和灵活性**，通常会**基于关系规范化原则**，将物理世界中的数据信息分解成多个表，实现**一类数据一个表**，并且在**表与表之间通过设置“键”（如主键、外键）的方式来保持多表之间的关联关系**。与此同时，在关系数据库的应用中，需要通过对表对象的连接运算，实现数据库中数据信息的组合，而这种**数据组合的需求**，在SQL中正是通过**多表连接查询来实现**的，这种分解与组合数据的方法，使得数据库系统能够**更有效地存储数据，更方便地处理数据，且可获得更大的可伸缩性。**
+
+下面介绍交叉连接、内连接和外连接。
+
+### 1.交叉连接  关键字 CROSS JOIN
+
+交叉连接、又称笛卡尔积，在MySQL中，它是通过在FROM子句中使用关键字“CROSS JOIN”来连接两张表，从而实现一张表的每一行与另一张表的每一行的笛卡尔乘积，并返回两张表的每一行相乘的所有可能的搭配结果，供 SELECT 语句中其他语法元素（如 WHERE 子句、 GROUP BY 子句等）进行过滤和筛选操作。
+
+例： 输出数据库 nunuDB 中的表 user 和 model 执行交叉连接后的所有数据集。
+
+```MySQL
+mysql> SELECT * FROM nunuDB.user CROSS JOIN nunuDB.model
+```
+
+以上是完整语法，但是一般省略如下
+
+```MySQL
+mysql> SELECT * FROM nunuDB.user,nunuDB.model
+```
+
+省略CROSS JOIN的同时用逗号分隔多个表。
+
+注意：交叉连接返回的查询结果集的记录行数，等于其所连接的两张表记录行数的乘积，因此，对于存在大量数据的表，应该避免使用交叉连接。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
