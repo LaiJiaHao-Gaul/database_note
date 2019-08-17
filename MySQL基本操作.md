@@ -985,7 +985,7 @@ expression {关系运算符} {ALL|SOME|ANY} (subquery)
 
 三个关键字 “ALL” “SOME” “ANY” 为选择项，用于**指定对比较运算的限制**。
 
-其中，关键字 “ALL” 用于指定表达式需要与子查询结果集里的眠歌之都进行比较，当表达式与每个值都满足比较关系时，会返回 TRUE，否则返回 FALSE；
+其中，关键字 “ALL” 用于指定表达式需要与子查询结果集里的每个值都进行比较，当表达式与每个值都满足比较关系时，会返回 TRUE，否则返回 FALSE；
 
 关键字“SOME” 和 “ANY” 是同义词，表示表达式只要与子查询结果集里的某个值满足比较关系时，就返回TRUE，否则返回 FALSE。
 
@@ -1003,10 +1003,167 @@ EXIST(subquery)
 
 注意：子查询通常可以改写成通过表的连接方式来实现，只是两者的执行性能会有所差异。
 
+### 五、GROUP BY 子句与分组数据
 
+在 SELECT 语句中，允许使用 GROUP BY 子句，将结果集里的数据行根据选择列的值进行逻辑分组，以便能汇总表内容的子集，即实现对每个组的聚集计算。因而，GROUP BY 子句可指示 DBMS 分组数据，然后对每个组而不是对整个结果集进行聚合。
 
+语法格式
 
+```MySQL
+GROUP BY {col_name|expr|position} [ASC|DESC], ... [WITH ROLLUP]
+```
 
+在此语法格式中：
+
+col_name:指定用于分组的选择列。可以指定多个列，彼此间用逗号分隔。 注意：**GROUP BY 子句中的各选择列必须也是SELECT语句的选择列表清单中的一项。
+
+expr: 指定分组的表达式。该表达式通常与聚合函数一块使用，例如可将表达式“COUNT(*)AS '人数'” 作为SELECT语句的选择列表清单中的一项。
+
+position: 指定用于分组的选择列在SELECT语句结果集中的文职，通常时一个正整数。例如，使用GROUP BY 3 表示根据SELECT语句中 列清单上的第三列的值进行逻辑分组。
+
+ASC | DESC：关键字“ASC”表示按升序分组；关键字 “DESC” 表示按降序分组。默认值为ASC。这两个关键字必须位于对应的列名、表达式、列的位置后。
+
+WITH ROLLUP: 此关键字为可选项，用于指定在结果集中不仅包含由 GROUP BY 子句分组后的数据行，还包含各分组的汇总行，以及所有分组的整体汇总行。因此，使用该关键字，可以得到每个分组以及每个分组汇总级别的值。
+
+例：在数据库 nunuDB 的表 user 中获取一个数据结果集，要求该结果集里分别包含 用户性别、用户年龄和每个用户年龄中每个性别的人数。
+
+```MySQL
+mysql> SELECT user_sex,user_age,COUNT(*) '人数'
+    -> FROM user
+    -> GROUP BY user_sex,user_age;
+```
+
+例：在数据库 nunuDB 的表 user 中获取一个数据结果集，要求改结果集里分别包含 用户性别、用户年龄和每个用户年龄中每个性别的人数，不同性别的总人数还有总人数。
+
+```MySQL
+mysql> SELECT user_sex,user_age,COUNT(*) '人数'
+    -> FROM user
+    -> GROUP BY user_sex,user_age
+    -> WITH ROLLUP
+```
+
+在 GROUP BY 子句中添加可选项“WITH ROLLUP”后，将对 GROUP BY 子句中所指定的各列再次生成汇总行，其汇总规则是： 按列的排列的逆序依次进行汇总，并且在生成的统一逻辑组的汇总行中，对于具有不同列值的字段值将被设置为NULL。
+
+对于 GROUP BY 的使用需要注意以下几点：
+
+1、GROUP BY 子句可以包含任意数目的列，使得其可对分组进行嵌套，为数据分组提供更加细致的控制。
+
+2、如果在 GROUP BY 子句中嵌套了分组，那么将按GROUP BY 子句中列的排列顺序的逆序方式依次进行汇总，并将在最后规定的分组上进行一个完全汇总。
+
+3、GROUP BY 子句中列出的每个列都必须在 GROUP BY 子句中给出。
+
+4、除聚合函数外，SELECT 语句中的梅格列都必须在 GROUP BY 子句中给出。
+
+5、如果用于分组的列中含有NULL值，则NULL将最为一个单独的分组返回；如果该列中存在多个NULL值，则将这些NULL值所在的行分为一组。
+
+### HAVING 子句  过滤分组
+
+在 SELECT 语句中，除了能使用 GROUP BY 子句分组数据之外，还可以使用 HAVING 子句来**过滤分组**，即在结果集里规定包含哪些**分组**和排除哪些**分组**。
+
+语法格式：
+
+```MySQL
+HAVING where_condition
+```
+
+where_condition 用于指定过滤条件。
+
+HAVING 子句 于 WHERE 子句非常相似，HAVING 子句支持 WHERE 子句中所有的操作符和句法，但两者之间仍存在以下几点差异。
+
+1、WHERE主要用于**过滤数据行**，而 HAVING 子句主要用于**过滤分组**，即HAVING子句可**基于分组的聚合值而不是特定行的值来过滤数据**。
+
+2、HAVING 子句中的条件可以包含聚合函数，而WHERE子句中则不可以。
+
+3、WHERE 子句会在**数据分组前**进行过滤，HAVING 子句则会在**数据分组后**进行过滤。因而，WHERE 子句排除的行不包含在分组中，这就会可能改变计算值，从而影响HAVING子句基于这些值过滤掉的分组。
+
+例：在数据库 nunuDB 的表 user 中查找这样一类客户信息：要求在返回的结果集里，列出满足相同年龄和相同性别大于两人的年龄数。
+
+```MySQL
+mysql>SELECT user_sex，user_age
+    ->FROM user
+    ->GROUP BY user_sex,user_age
+    ->HAVING COUNT(*)>=2;
+```
+
+### ORDER BY 子句 结果集排序
+
+在 SELECT 语句中，可以使用 ORDER BY 子句将结果集中的数据行按一定的顺序进行排列，否则结果集里数据行的顺序时不可预料的。
+
+语法格式；
+
+```MySQL
+ORDER BY {col_name|expr|position}[ASC|DESC],...
+```
+
+在此语法中：
+
+col_name: 指定用于排序的列。可以同时指定多个列，列名彼此间用逗号分隔。
+
+expr：指定用于排序的表达式
+
+position：指定用于排序的列在SELECT语句结果集里的位置，通常是一个正整数。例如，使用 ORDER BY 2 表示对 SELECT 语句中列清单上的第2列进行排序。
+
+ASC | DESC：关键字“ASC”表示按升序排列；关键字“DESC”表示按降序排列。其中，默认值为ASC。这两个关键字必须位于对应的列名、表达式、列的位置之后。
+
+例：在数据库 nunuDB 的表 user 中 用对数据“年龄”升序的方式列出用户的id和姓名。
+
+```MySQL
+mysql>SELECT user_id,user_name
+    ->FROM user
+    ->ORDER BY user_age ASC;
+```
+
+对于 ORDER BY 子句的使用，需要注意以下几点：
+
+1、ORDER BY 子句中可以包含子查询。
+
+2、当对空值进行排序时，ORDER BY 子句会将该空值作为最小值来对待。即，若按升序排列结果集，则 ORDER BY 子句会将该空值所在的数据行置于结果集的最上方；若是使用降序排序，则会将其置于结果集的最下方。
+
+3、若在 ORDER BY 子句中指定多个列进行排序，则在MySQL中会按照这些列从左至右所罗列的次序依次进行排序。
+
+4、在使用 GROUP BY 子句时，通常也会同时使用 ORDER BY 子句。
+
+以下列出 ORDER BY 子句 与 GROUP BY 子句的差别：
+
+ORDER BY 子句|GROUP BY 子句
+---|:--:|
+排序产生的输出|分组可以，但输出可能不是分组的排序
+任意列都可以使用|值可能使用选择列或表达式列
+不一定需要| 若与聚合函数一起使用列或表达式，则必须使用
+
+### LIMIT 子句 限制返回的行数
+
+当使用 SELECT 语句返回的结果集中行数很多时，为了便于用户对结果数据的浏览和操作，可以使用LIMIT子句来限制被SELECT语句返回的行数。
+
+语法格式：
+
+```MySQL
+LIMIT {[offset,] row_count|row_count OFFSET offset}
+```
+
+在此语法中：
+
+offset：为可选项，默认为数字0，用于指定返回数据的第一行在 SELECT 语句结果集里的**偏移量**，其**必须是非负的整数**常量。注意，SELECT 语句结果集里的**第一行（初始行）的偏移量为0，而不是1**。
+
+row_count：用于指定返回数据的行数，其也必须是非负的整数常量，若这个指定行数大于实际能返回的行数时，在MySQL只返回能返回的数据行。
+
+row_count OFFSET offset:从第 offset+1 行开始，取 row_count 行。
+
+例： 在数据库 nunuDB 的表 user 中查找从第2位客户开始的3位客户的id号和姓名信息。
+
+```MySQL
+mysql> SELECT user_id,user_name FROM user
+    -> ORDER BY user_id
+    -> LIMIT 1,3 //第二位客户的偏移量为1，展示3位。
+```
+
+也可以写成
+
+```MySQL
+mysql> SELECT user_id,user_name FROM user
+    -> ORDER BY user_id
+    -> LIMIT 3 OFFSET 1
+```
 
 
 
