@@ -409,7 +409,7 @@ ALTER在修改表的同时，可以向已有的表中添加索引。具体使用
 
 1、语法项 ADD {INDEX | KEY} [index_name] (index_col_name,...)用于表示在修改表的同时为该表添加索引；
 
-2、语法项 ADD [CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在修改表的同时为该表添加主键(ADD PRIMARY KEY(index_col_name,...))
+2、语法项 ADD [CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在修改表的同时为该表**添加主键**(ADD PRIMARY KEY(index_col_name,...))
 
 3、语法项 ADD [CONSTRAINT [symbol]]UNIQUE [INDEX|KEY] [index_name] (index_col_name,..),用于表示在修改表的同时为该表添加外键。
 
@@ -557,7 +557,15 @@ DELETE FROM tb1_name
     [LIMIT row_count]
 ```
 
-在此语法中：“tb1_name”指定要删除数据的表明；可选项 WHERE 子句表示为删除操作限定删除条件，从而删除特定的行，若省略 WHERE 子句，则表示删除该表中的所有行，但表的定义仍在数据字典中，即 DELETE 语句删除的时表中的数据，而不是关于表的定义； 可选项 ORDER BY 子句表示各行将按照子句中指定的顺序进行删除；可选项 LIMIT 子句用于告知服务器在控制民工被返回到客户端前被删除的行的最大值。
+在此语法中：
+
+“tb1_name”指定要删除数据的表名；
+
+可选项 WHERE 子句表示为删除操作限定删除条件，从而删除特定的行，若省略 WHERE 子句，则表示删除该表中的所有行，但表的定义仍在数据字典中，即 DELETE 语句删除的时表中的数据，而不是关于表的定义； 
+
+可选项 ORDER BY 子句表示各行将按照子句中指定的顺序进行删除；
+
+可选项 LIMIT 子句用于告知服务器在控制命令被返回到客户端前被删除的行的最大值。
 
 例：使用DELETE语句删除数据库 nunuDB 的表 user 中客户名为 "nunu" 的客户信息。
 
@@ -582,7 +590,11 @@ UPDATE tb1_name
 
 “tb1_name"指定要修改的表的名称；
 
-SET 子句用于指定表中要修改的列名及其列值，其中每个指定的列值可以是表达式，也可以是该列所对应的默认值，如果指定的是默认值，则用关键字”DEFAULT“表示列值；可选项 WHERE 子句用于限定表中要修改的行，若不指定此子句，则 UPDATE 语句会修改表中所有的行；可选项 WHERE 子句用于限定表中要修改的行，若不指定此子句，则 UPDATE 语句会修改表中所有的行；可选项 ORDER BY 子句用于限定表中的行被修改的次序；可选项LIMIT子句用于限定被修改的行数。
+SET 子句用于指定表中要修改的列名及其列值，其中每个指定的列值可以是表达式，也可以是该列所对应的默认值，如果指定的是默认值，则用关键字”DEFAULT“表示列值；
+
+可选项 WHERE 子句用于限定表中要修改的行，若不指定此子句，则 UPDATE 语句会修改表中所有的行；
+
+可选项 ORDER BY 子句用于限定表中的行被修改的次序；可选项LIMIT子句用于限定被修改的行数。
 
 例： 使用 UPDATE 语句将数据库 nunuDB 的表 user 中姓名为 ljh 的客户的年龄更新为23.
 
@@ -1163,6 +1175,138 @@ mysql> SELECT user_id,user_name FROM user
 mysql> SELECT user_id,user_name FROM user
     -> ORDER BY user_id
     -> LIMIT 3 OFFSET 1
+```
+
+## 视图
+
+### 创建视图
+
+#### CREATEVIEW 语句 创建视图
+
+语法格式：
+
+```MySQL
+CREATEVIEW view_name [(column_list)]
+    AS select_statement
+    [WITH [CASCADED|LOCAL] CHECK OPTION]
+```
+
+在此语法结构中：
+
+view_name 视图名 用于指定视图的名称，且该名称在数据库中必须是唯一的，不能与其他表或视图同名。
+
+column_list 列名  是可选项，用于为视图的每个列指定明确的名称，且**列名的数目必须等于 SELECT 语句检索出的结果数据集的列数**，同时每个列名间用逗号分隔。如若省略 column_list ，则新建视图使用与基本表或源视图中相同的列名。
+
+select_statement  SELECT语句 用于指定创建视图的 SELECT 语句。这个 SELECT 语句给出了视图的定义，它可用于查询多个基本表或源视图。
+
+WITH CHECK OPTION 是可选项，用于指定在可更新视图上所进行的修改都需要符合 select_statement 中所指定的限制条件，这样可以确保数据修改后，仍可以通过视图看到修改后的数据。当视图时根据另一个视图定义时，关键字 “WITH CHECK OPTION” 给出两个参数，即 CASCADED 和 LOCAL，它们决定检查测试的范围。其中，关键字 “CASCADED” 为选项默认值，它会对所有视图进行检查，而关键字 “LOCAL” 则使 CHECK OPTION 只对定义的视图进行检查。
+
+例： 在数据库 nunuDB 中创建 视图 user_view，该视图包含user表中所有性别为男的用户信息，并且要求保证今后对该试图数据的修改都必须符合客户性别为男性这个条件。
+
+```MySQL
+mysql> CREATE VIEW Man_view AS SELECT * FROM nunuDB.user WHERE user_sex = 1
+    -> WITH CHECK OPTION;
+```
+
+如果视图使用WITH LOCAL CHECK OPTION，MySQL会检查WITH LOCAL CHECK OPTION和WITH CASCADED CHECK OPTION选项的视图规则。
+
+与使用WITH CASCADED CHECK OPTION的视图不同，MySQL检查所有依赖视图的规则。
+
+请注意，在MySQL 5.7.6之前，如果您使用带有WITH LOCAL CHECK OPTION的视图，MySQL只会检查当前视图的规则，并且不会检查底层视图的规则。
+
+### 删除视图
+
+#### DROP VIEW 语句 删除视图
+
+语法格式：
+
+```MySQL
+DROP VIEW [IF EXISTS]
+    view_name[,view_name] ...
+    [RESTRICT|CASCADE]
+```
+
+使用DROP VIEW 可以一次性删除多个视图，但必须在每个视图上拥有DROP权限。
+
+同时，为了防止因删除不存在的视图而出错，需要在 DROP VIEW 语句中添加关键字 “IF EXISTS”。
+
+### 修改视图定义
+
+#### ALTER VIEW  修改视图定义
+
+```MySQL
+ALTER VIEW view_name [(column_list)]
+    AS select_statement
+    [WITH [CASCADED|LOCAL] CHECK OPTION]
+```
+
+可见 ALTER VIEW 语句 与 CREATE VIEW 语句的语法是相似的。
+
+此外，修改视图的定义，也可以通过先 DROP VIEW 再 CREATE VIEW 语句的过程来实现。
+
+### 查看视图定义
+
+#### SHOW CREATE VIEW 语句 查看已有视图的定义（结构）
+
+语法：
+
+```MySQL
+SHOW CREATE VIEW view_name
+```
+
+view_name 指定要查看视图的名称
+
+### 更新视图数据
+
+更新视图数据总共有三种方法。
+
+需要注意的是： 视图的更新操作是受一定限制的，并非所有的视图都可以进行 INSERT、UPDATE 或 DELETE 等更新操作，只有满足可更新条件的视图才能更新，否则可能会导致系统出现不可预期的结果。
+
+对于可更新的视图，需要该视图中的行于基本表中的行之间具有一对一的关系。
+
+第一种更新视图的方法
+
+#### INSERT 语句 通过视图向基本表插入数据
+
+例：
+
+```MySQL
+mysql> INSERT INTO nunuDB.user_view
+    ->  VALUES(4,'bb',3,1);
+```
+
+这条插入语句能够成功执行，是因为在创建视图 customers_view 的语句中添加了 WITH CHECK OPTION 子句，该子句会在更新数据时，检查新数据是否符合视图定义中 WHERE 子句的条件，且 WITH CHECK OPTION 子句只能和可更新视图一起使用。若新数据不符合where子句的条件，则操作无法成功。
+
+另外，当视图所依赖的基本表有多个时，也不能向该视图插入数据，这是因为在MySQL中不能正确地确定要被更新地基本表。
+
+#### UPDATE 语句 通过视图修改基本表的数据
+
+例：将视图 new_view 中所有客户的 user_address 列更新为'深圳市'
+
+```MySQL
+mysql>UPDATE new_view
+    ->SET user_address = '深圳市';
+```
+
+注意：若一个视图依赖于多个基本表，则依次视图数据修改操作只能改变一个基本表中的数据。
+
+#### 使用 DELETE 语句 通过视图删除基本表的数据
+
+例： 删除视图 new_view 中 姓名为 fff 的客户信息。
+
+```MySQL
+mysql>DELETE FROM new_view
+    ->  WHERE user_name = 'fff';
+```
+
+#### 查询视图数据
+
+例： 在视图 new_view 中查找客户 ID 号为 15 的客户姓名及其地址信息
+
+```MySQL
+mysql> SELECT user_name,user_address
+    ->  FROM new_view
+    ->  WHERE user_id = 15;
 ```
 
 
