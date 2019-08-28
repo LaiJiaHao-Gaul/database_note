@@ -14,7 +14,7 @@
 
 “ db_name ”
 
-标识数据库名 在MySQL中不区分大小写。
+表示数据库名 在MySQL中不区分大小写。
 
 “ DEFAULT ” 关键字
 
@@ -133,11 +133,11 @@ mysql> SHOW DATABASES;
 语法格式：
 
 ```mysql
-CREATE [TEMPORARY] TABLE tb1_name
+CREATE [TEMPORARY] TABLE tbl_name
 (
 字段名1 数据类型 [列级完整性约束条件][默认值]
 [,字段名2 数据类型 [列级完整性约束条件][默认值]]
-[,...]
+[,···]
 [,表级完整性约束条件]
 )[ENGINE=引擎类型];
 ```
@@ -285,7 +285,7 @@ mysql> ALTER TABLE nunuDB.try
 
 ```MySQL
 RENAME TABLE nunuDB TO nunuDatabase
-[,table2 TO new_table2] ...
+[,table2 TO new_table2] ···
 ```
 
 例：
@@ -303,7 +303,7 @@ Query OK,0 rows affected (1 sec)
 
 ```MySQL
 DROP [TEMPORARY] TABLE [IF EXISTS]
-    tb1_name [,tb1_name] ...
+    tbl_name [,tbl_name] ···
     [RESTRICT|CASCADE]
 ```
 
@@ -322,7 +322,7 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 语法格式：
 
 ```MySQL
-{DESCRIBE|DESC} tb1_name [col_name|wild]
+{DESCRIBE|DESC} tbl_name [col_name|wild]
 ```
 
 例：
@@ -345,7 +345,7 @@ mysql> DESC nunuDB.try;
 
 ```MySQL
 CREATE [UNIQUE] INDEX index_name
-    ON tb1_name(index_col_name,...)
+    ON tbl_name(index_col_name,···)
 ```
 
 其中，index_col_name 的格式为：
@@ -360,7 +360,7 @@ col_name [(length)[ASC|DESC]]
 
 注意：**一个表可以创建多个索引，但每个索引在该表中的名称必须是唯一的；**
 
-tb1_name 用于指定要建立索引的表名，
+tbl_name 用于指定要建立索引的表名，
 
 index_col_name 是关于索引列的描述。
 
@@ -393,13 +393,13 @@ Query OK, 0 rows affected(0.20 sec)
 
 索引可以在创建表的同时一起被创建。具体使用方法时，可在 CREATE TABLE 语句语法中的表创建定义（create difinition）部分添加以下语法成分中的某一项或几项：
 
-1、语法项[CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在创建新表的同时创建该表的主键；
+1、语法项[CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,···),用于表示在创建新表的同时创建该表的主键；
 
-2、语法项{INDEX|KEY} [index_name] (index_col_name,...),用于表示在创建信标的同时创建该表的索引。
+2、语法项{INDEX|KEY} [index_name] (index_col_name,···),用于表示在创建信标的同时创建该表的索引。
 
-3、语法项[CONSTRAINT [symbol]] UNIQUE [INDEX|KEY] [index_name] (index_col_name,...),用于表示在创建新表的同时创建该表的唯一性索引。
+3、语法项[CONSTRAINT [symbol]] UNIQUE [INDEX|KEY] [index_name] (index_col_name,···),用于表示在创建新表的同时创建该表的唯一性索引。
 
-4、语法项[CONSTRAINT[symbol]]FOREIGN KEY [index_name] (index_col_name,...),用于表示在创建新表的同时创建该表的外键。
+4、语法项[CONSTRAINT[symbol]]FOREIGN KEY [index_name] (index_col_name,···),用于表示在创建新表的同时创建该表的外键。
 
 第三种创建索引的方法
 
@@ -407,13 +407,13 @@ Query OK, 0 rows affected(0.20 sec)
 
 ALTER在修改表的同时，可以向已有的表中添加索引。具体使用方法时，可在ALTER TABLE语句语法中添加以下语法成分中的某一项或几项。
 
-1、语法项 ADD {INDEX | KEY} [index_name] (index_col_name,...)用于表示在修改表的同时为该表添加索引；
+1、语法项 ADD {INDEX | KEY} [index_name] (index_col_name,···)用于表示在修改表的同时为该表添加索引；
 
-2、语法项 ADD [CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,...),用于表示在修改表的同时为该表**添加主键**(ADD PRIMARY KEY(index_col_name,...))
+2、语法项 ADD [CONSTRAINT [symbol]] PRIMARY KEY (index_col_name,···),用于表示在修改表的同时为该表**添加主键**(ADD PRIMARY KEY(index_col_name,···))
 
 3、语法项 ADD [CONSTRAINT [symbol]]UNIQUE [INDEX|KEY] [index_name] (index_col_name,..),用于表示在修改表的同时为该表添加外键。
 
-4、语法项 ADD [CONSTRAINT [symbol]]FOREIGN KEY [index_ name] (index_col_name,...), 用于表示在修改表的同时为该表添加外键。
+4、语法项 ADD [CONSTRAINT [symbol]]FOREIGN KEY [index_ name] (index_col_name,···), 用于表示在修改表的同时为该表添加外键。
 
 例： 使用 ALTER TABLE 语句在数据库 mysql_test 中表 seller 的姓名列上添加一个非唯一的索引，取名为 index_seller_name 。
 
@@ -432,7 +432,7 @@ mysql> ALTER TABLE mysql_test.seller
 
 ```MySQL
 SHOW {INDEX|INDEXES|KEYS}
-    {FROM|IN}tb1_name
+    {FROM|IN}tbl_name
     [{FROM|IN} db_name]
     [WHERE expr]
 ```
@@ -446,7 +446,7 @@ SHOW {INDEX|INDEXES|KEYS}
 格式：
 
 ```MySQL
-DROP INDEX index_name ON tb1_name
+DROP INDEX index_name ON tbl_name
 ```
 
 第二种删除索引的方法：
@@ -479,22 +479,22 @@ mysql>ALTER TABLE mysql_test.customers
 
 INSERT 语句有三种语法形式，分别对应的是：
 
-INSERT ... VALUES 语句
+INSERT ··· VALUES 语句
 
-INSERT ... SET 语句
+INSERT ··· SET 语句
 
-INSERT ... SELECT 语句
+INSERT ··· SELECT 语句
 
-在 MySQL 中，使用 INSERT...VALUES 语句插入单行或多行元组数据的语法格式是：
+在 MySQL 中，使用 INSERT···VALUES 语句插入单行或多行元组数据的语法格式是：
 
 ```MySQL
-INSERT [INTO] tb1_name [(col_name,...)]
-    {VALUES|VALUE} ({expr|DEFAULT},...),(...),...
+INSERT [INTO] tbl_name [(col_name,···)]
+    {VALUES|VALUE} ({expr|DEFAULT},···),(···),···
 ```
 
 此语法中：
 
-tb1_name 指定欲被插入数据的表名。
+tbl_name 指定欲被插入数据的表名。
 
 col_name 指定需要插入数据的列名。如果向表中所有列插入数据，则全部列名都可以省略
 
@@ -516,7 +516,7 @@ i）“expr”，表示一个常量、变量或一个表达式，也可以是空
 
 ii）关键字“DEFAULT”，即用于指定此列值为该列的默认值，前提是该列之前已经明确指定了默认值，否则插入语句会报错。
 
-例：使用 INSERT ... VALUES 语句相数据库 nunuDB 的表 user 中插入数据：
+例：使用 INSERT ··· VALUES 语句相数据库 nunuDB 的表 user 中插入数据：
 
 user_name = nunu
 
@@ -533,13 +533,13 @@ mysql> INSERT nunuDB.user(user_name,user_age,user_sex)
 
 第三个插入数据的方法会更加**灵活且常用**
 
-#### INSERT...SELECT
+#### INSERT···SELECT
 
 语法格式：
 
 ```MySQL
-INSERT tb1_name [(col_name,...)]
-SELECT ...
+INSERT tbl_name [(col_name,···)]
+SELECT ···
 ```
 
 在此语法中，SELECT 子句用于快速地从一个或多个表中取出数据，并将这些数据作为行数据插入到另一个表中，SELECT 子句返回的是一个查询到的结果集，INSERT语句将这个结果集插入到指定表中，其中结果集里每行数据的字段数、字段的数据类型必须与被操作的表完全一致。
@@ -551,17 +551,17 @@ SELECT ...
 语法格式：
 
 ```MySQL
-DELETE FROM tb1_name
+DELETE FROM tbl_name
     [WHERE where_condition]
-    [ORDER BY ...]
+    [ORDER BY ···]
     [LIMIT row_count]
 ```
 
 在此语法中：
 
-“tb1_name”指定要删除数据的表名；
+“tbl_name”指定要删除数据的表名；
 
-可选项 WHERE 子句表示为删除操作限定删除条件，从而删除特定的行，若省略 WHERE 子句，则表示删除该表中的所有行，但表的定义仍在数据字典中，即 DELETE 语句删除的是表中的数据，而不是关于表的定义； 
+可选项 WHERE 子句表示为删除操作限定删除条件，从而删除特定的行，若省略 WHERE 子句，则表示删除该表中的所有行，但表的定义仍在数据字典中，即 DELETE 语句删除的是表中的数据，而不是关于表的定义；
 
 可选项 ORDER BY 子句表示各行将按照子句中指定的顺序进行删除；
 
@@ -579,16 +579,16 @@ mysql> DELETE FROM nunuDB.user
 在MySQL中，可以使用 UPDATE 语句来修改更新一个表中的数据，实现对表中行的列数据进行修改，其语法格式是：
 
 ```MySQL
-UPDATE tb1_name
-    SET col_name1={expr1|DEFAULT}[,col_name2={expr2|DEFAULT}] ...
+UPDATE tbl_name
+    SET col_name1={expr1|DEFAULT}[,col_name2={expr2|DEFAULT}] ···
     [WHERE where_condition]
-    [ORDER BY ...]
+    [ORDER BY ···]
     [LIMIT row_count]
 ```
 
 在此语法中：
 
-“tb1_name"指定要修改的表的名称；
+“tbl_name"指定要修改的表的名称；
 
 SET 子句用于指定表中要修改的列名及其列值，其中每个指定的列值可以是表达式，也可以是该列所对应的默认值，如果指定的是默认值，则用关键字”DEFAULT“表示列值；
 
@@ -621,10 +621,10 @@ select_expr[,select_expr]
 FROM table_references
 [WHERE where_condition]
 [GROUP BY {col_name | expr | position }
-[ASC|DESC], ... [WITH ROLLUP]]
+[ASC|DESC], ··· [WITH ROLLUP]]
 [HAVING where_condition]
 [ORDER BY { col_name | expr | position }
-    [ASC | DESC],...]
+    [ASC | DESC],···]
 [LIMIT {[offset,] row_count|row_count OFFSET offset}]
 ```
 
@@ -705,7 +705,7 @@ mysql> SELECT user_name AS 姓名,user_sex,user_age
 CASE
 WHEN 条件1 THEN 表达式1
 WHEN 条件2 THEN 表达式2
-...
+···
 ELSE 表达式
 END [AS] column_alias
 ```
@@ -815,7 +815,7 @@ ON some_conditions;
 
 “some_columns”用于指定需要检索的列的名称或列别名；
 
-“table1” 和 “table2”用于指定进行内连接的两张表哦的表明或表别名；
+“table1” 和 “table2”用于指定进行内连接的两张表的表名或表别名；
 
 ON 子句通过事先设定的连接条件“some_conditions”来指定两张表按什么条件进行连接，且连接条件中可采用任何一种比较运算符。
 
@@ -898,7 +898,7 @@ mysql>SELECT * FROM nunuDB.user
 
 在 WHERE 子句中，用于范围判定的关键字有 “BETWEEN” 和 “IN” 两个。
 
-（1）BETWEEN...AND
+（1）BETWEEN···AND
 
 当查询的过滤条件被限定在值得某个范围时，可以使用关键字“BETWEEN”。
 
@@ -922,7 +922,7 @@ mysql> SELECT * FROM user
 使用关键字 IN 可以指定一个值的枚举表，该表中会列出所有可能的值，其使用语法格式时：
 
 ```MySQL
-expression IN (expression [,...n])
+expression IN (expression [,···n])
 ```
 
 当要判定的值能与该表中任意一个值匹配时，会返回结果 TRUE，否则返回 FALSE。
@@ -1022,7 +1022,7 @@ EXIST(subquery)
 语法格式
 
 ```MySQL
-GROUP BY {col_name|expr|position} [ASC|DESC], ... [WITH ROLLUP]
+GROUP BY {col_name|expr|position} [ASC|DESC], ··· [WITH ROLLUP]
 ```
 
 在此语法格式中：
@@ -1104,7 +1104,7 @@ mysql>SELECT user_sex，user_age
 语法格式；
 
 ```MySQL
-ORDER BY {col_name|expr|position}[ASC|DESC],...
+ORDER BY {col_name|expr|position}[ASC|DESC],···
 ```
 
 在此语法中：
@@ -1222,7 +1222,7 @@ mysql> CREATE VIEW Man_view AS SELECT * FROM nunuDB.user WHERE user_sex = 1
 
 ```MySQL
 DROP VIEW [IF EXISTS]
-    view_name[,view_name] ...
+    view_name[,view_name] ···
     [RESTRICT|CASCADE]
 ```
 
@@ -1321,7 +1321,7 @@ mysql> SELECT user_name,user_address
 DELIMITER $$
 ```
 
-其中 $$是用户定义的结束符，避免使用反斜杠\ 
+其中 $$是用户定义的结束符，避免使用反斜杠\
 
 例：把MySQL结束符修改为两个感叹号 !!
 
@@ -1336,7 +1336,7 @@ mysql> DELIMITER !!
 语法格式：
 
 ```MySQL
-CREATE PROCEDURE sp_name ([PROC_PARAMETER[,...]])
+CREATE PROCEDURE sp_name ([PROC_PARAMETER[,···]])
     routine_body
 ```
 
@@ -1360,7 +1360,7 @@ type为参数的类型（可以是任何有效的MySQL数据类型）。当有�
 
 存储过程可以没有参数（此时存储过程的名称后仍需加上一对括号），也可以有一个或多个参数。
 
-MySQL 存储过程支持三种类型的参数，即输入参数，输出参数和输入/输出参数，分别用“IN”“OUT”和“INOUT”三个关键字标识。
+MySQL 存储过程支持三种类型的参数，即输入参数，输出参数和输入/输出参数，分别用“IN”“OUT”和“INOUT”三个关键字表示。
 
 输入参数是使数据可以传递给一个存储过程；
 
@@ -1370,7 +1370,7 @@ MySQL 存储过程支持三种类型的参数，即输入参数，输出参数�
 
 注意：参数的取名不要于数据表的列名相同，否则尽管不会出错，但是存储过程中的SQL语句会将参数名看作是列名，而而发不可预知的结果。
 
-routine_body 表示存储过程的主体部分，也成为存储过程体，其包含了在过程调用的时候必须执行的 SQL 语句。以关键字BEGIN开始，以关键字END结束，如果存储过程体只有一条SQL语句时，可以省略BEGIN...END标志。另外，在存储过程体中，BEGIN...END复合语句可以嵌套使用。
+routine_body 表示存储过程的主体部分，也成为存储过程体，其包含了在过程调用的时候必须执行的 SQL 语句。以关键字BEGIN开始，以关键字END结束，如果存储过程体只有一条SQL语句时，可以省略BEGIN···END标志。另外，在存储过程体中，BEGIN···END复合语句可以嵌套使用。
 
 例如：在数据库 nunuDB 中创建一个存储过程，用于实现对 调用该存储过程并给出用户id号 与 指定性别 即可修改 user 表中该用户的性别。
 
@@ -1395,7 +1395,7 @@ mysql> CREATE PROCEDURE change_sex(IN userid INT,IN usersex INT)
 语法格式是：
 
 ```MySQL
-DECLARE var_name[,...] type [DEFAULT value]
+DECLARE var_name[,···] type [DEFAULT value]
 ```
 
 var_name 用于指定局部变量的名称
@@ -1412,13 +1412,13 @@ DECLARE userid INT(10)
 
 注意：
 
-局部变量只能在**存储过程体的 BEGIN ... END 语句块中声明**。
+局部变量只能在**存储过程体的 BEGIN ··· END 语句块中声明**。
 
 局部变量**必须在存储过程体的开头处声明**。
 
-局部变量的**作用范围仅限于声明它的 BEGIN ... 语句块**，其他语句块中的语句不可以使用它。
+局部变量的**作用范围仅限于声明它的 BEGIN ··· 语句块**，其他语句块中的语句不可以使用它。
 
-局部变量不同于用户变量，两者的区别在于：局部变量声明时，在其前面没有使用@符号，并且它只能被声明它的 BEGIN...END语句块中的语句所使用；而**用户变量在声明时，会在其名称前面使用@符号，同时已声明的用户变量存在于整个会话之中**。
+局部变量不同于用户变量，两者的区别在于：局部变量声明时，在其前面没有使用@符号，并且它只能被声明它的 BEGIN···END语句块中的语句所使用；而**用户变量在声明时，会在其名称前面使用@符号，同时已声明的用户变量存在于整个会话之中**。
 
 2.SET 语句
 
@@ -1427,7 +1427,7 @@ DECLARE userid INT(10)
 语法格式:
 
 ```MySQL
-SET var_name = expr [, var_name = expr] ...
+SET var_name = expr [, var_name = expr] ···
 ```
 
 例： 为 已声明的userid 局部变量赋予一个整数值 910。 在存储过程（BEGIN 与 END）中
@@ -1436,14 +1436,14 @@ SET var_name = expr [, var_name = expr] ...
 SET userid=910
 ```
 
-3.SELECT...INTO 语句
+3.SELECT···INTO 语句
 
-SELECT...INTO 语句把选定列的值直接存储到局部变量中。
+SELECT···INTO 语句把选定列的值直接存储到局部变量中。
 
 语法格式：
 
 ```MySQL
-SELECT col_name[,...] INTO var_name[,...] table_expr
+SELECT col_name[,···] INTO var_name[,···] table_expr
 ```
 
 col_name 指定列名
@@ -1452,19 +1452,19 @@ var_name 指定要赋值的变量名
 
 table_expr 表示 SELECT 语句中的 FROM 子句及后面的语法部分。
 
-注意： 存储过程提中的 SELECT...INTO 语句返回的结果集只能有一行数据。
+注意： 存储过程提中的 SELECT···INTO 语句返回的结果集只能有一行数据。
 
 4.流程控制语句
 
 MySQL在存储过程体中，可以使用条件判断语句和循环语句这样两类用于控制语句流程的过程式SQL语句。
 
-1、条件判断语句： 常用的条件判断语句有 IF...THEN...ELSE 语句和 CASE 语句。使用语法和方式类似于高级程序设计语言。
+1、条件判断语句： 常用的条件判断语句有 IF···THEN···ELSE 语句和 CASE 语句。使用语法和方式类似于高级程序设计语言。
 
 2、循环语句： 常用的循环语句有 WHILE 语句、 REPEAT 语句和 LOOP 语句。使用语法和方式同样类似于高级程序设计语言。此外，循环语句中还可以使用 ITERATE 语句，但它只能出现在循环语句的 LOOP、REPEAT 和 WHILE 子句中，用于表示退出当前循环，且重新开始一个循环。
 
 5.游标
 
-在SELECT...语句成功执行后，会返回带有值的一行数据，这行数据可以被读取到存储过程中进行处理。
+在SELECT···语句成功执行后，会返回带有值的一行数据，这行数据可以被读取到存储过程中进行处理。
 
 然而，在使用 SELECT 语句进行数据检索会返回一组称为结果集的数据行，该结果集可能拥有多行数据，这些数据无法直接被一行一行的进行处理，此时就需要使用游标。（在高级程序设计语言中，称之为迭代器）
 
@@ -1502,19 +1502,19 @@ cursor_name 指定要打开的游标
 
 一个游标可以被多次打开，因为其他用户或应用程序可能随时更新了数据表，因此**每次打开游标的结果集可能会不同**。
 
-#### 3、读取数据 FETCH...INTO 语句读取游标数据
+#### 3、读取数据 FETCH···INTO 语句读取游标数据
 
 语法格式：
 
 ```MySQL
-FETCH cursor_name INTO var_name [,var_name] ...
+FETCH cursor_name INTO var_name [,var_name] ···
 ```
 
 cursor_name 指定**已打开的游标**
 
 var_name 指定存放数据的变量名
 
-FETCH ... INTO 语句 与 SELECT...INTO 语句具有相同的意义，FETCH语句是将游标指向的一行数据赋给一些变量，这些变量的数目必须等于声明游标时 SELECT 子句中选择列的数目。
+FETCH ··· INTO 语句 与 SELECT···INTO 语句具有相同的意义，FETCH语句是将游标指向的一行数据赋给一些变量，这些变量的数目必须等于声明游标时 SELECT 子句中选择列的数目。
 
 **游标相当于一个指针，它指向当前的一行数据。**
 
@@ -1573,7 +1573,7 @@ mysql> SELECT @len;
 
 2.游标只能用于存储过程或存储函数中，不能单独在查询操作中使用。
 
-3.在存储过程或存储函数中可以定义多个游标，但是在一个BEGIN...END语句块中每一个游标的名字必须是唯一的。
+3.在存储过程或存储函数中可以定义多个游标，但是在一个BEGIN···END语句块中每一个游标的名字必须是唯一的。
 
 4.游标不是一条SELECT语句，是被SELECT语句检索出来的结果集。
 
@@ -1584,7 +1584,7 @@ mysql> SELECT @len;
 语法格式：
 
 ```MySQL
-CALL sp_name([parameter[,...]])
+CALL sp_name([parameter[,···]])
 CALL sp_name[()]
 ```
 
@@ -1637,7 +1637,7 @@ mysql>DROP PROCEDURE change_sex;
 语法：
 
 ```MySQL
-CREATE FUNCTION sp_name ([func_parameter[,...]])
+CREATE FUNCTION sp_name ([func_parameter[,···]])
     RETURNS type
     routine_body
 ```
@@ -1683,7 +1683,7 @@ end;
 语法：
 
 ```MySQL
-SELECT sp_name([func_parameter[,...]])
+SELECT sp_name([func_parameter[,···]])
 ```
 
 例： 调用数据库 nunuDB 中的存储函数 search_sex搜索ID号为5的用户性别
@@ -1710,26 +1710,661 @@ sp_name 指定要删除的存储函数的名称。
 mysql>drop function if exists search_sex;  
 ```
 
+--------------------
 
+## 主键候选键相关知识
 
+关系模型有三类完整性约束：实体完整性，参照完整性，用户定义的完整性。
 
+### 实体完整性
 
+实体完整性则是通过 **主键约束** 和 **候选键约束** 实现的。
 
+#### 主键约束 （PRIMARY）
 
+主键可以是表中的某一列，也可以是表中多个列所构成的一个组合。其中，由多个列组合而成的主键也称为复合主键。在MySQL中，主键列必须遵守如下一些规则：
 
+1.**每个表只能定义一个主键。**
 
+2.主键的值（键值），必须能够**唯一标志表中的每一行记录**，且不能为null。——**唯一性原则**
 
+3.复合主键不能包含不必要的多余列。——**最小化原则**
 
+4.一个列名在复合主键的列表中只能出现一次。
 
+定义主键约束后，MySQL会自动为主键创建一个唯一性索引，用于在查询中使用主键对数据进行快速检索，该索引名默认为 PRIMARY，也可以重新自定义命名。
 
+#### 候选键约束 （UNIQUE）
 
+大多数与主键是一样的。
 
+但有以下几点区别：
 
+1.一个表中只能创建一个主键，但可以定义若干个候选键。
 
+2.定义主键约束时，系统会自动产生 PRIMARY KEY 索引，而定义候选键约束时，系统会自动产生UNIQUE索引。
 
+### 参照完整性
 
+在 MySQL 中，参照完整性是通过在创建表或更新表的同时定义一个外键声明来实现的。外键声明有如下两种方式：
 
+在表中某个列的属性定义后直接加上 “reference_definition” 语法项。
 
+在表中所有列的属性定义后添加 “FOREIGN KEY (index_col_name,···) reference_definition 子句的语法项。
+
+reference_definition语法项的定义：
+
+```MySQL
+REFERENCES tbl_name(index_col_name,···)
+    [ON DELETE reference_option]
+    [ON UPDATE reference_option]
+```
+
+上面的index_col_name的语法格式是：
+
+```MySQL
+col_name[(length)] [ASC|DESC]
+```
+
+reference_option 的语法格式是：
+
+```MySQL
+RESTRICT|CASCADE|SET NULL|NOCATION
+```
+
+可见，语法项“reference_definition”的语法定义主要包含外键所参照的表和列、参照动作的声明、实施策略等四部分内容。
+
+tbl_name 指定外键所参照的表名。这个表称为“被参照表”（或“父表”），  而外键所在的表称作参照表（或子表）。
+
+col_name 指定被参照的列名。外键可以引用**被参照表中的主键或候选键，也可以引用被参照表中某些列的一个组合**，但这个组合不能是被参照表中随机的一组列，**必须保证该组合的取值在被参照表中是唯一的**。外键中的所有列值在被参照表的列中必须全部存在，也就是通过外键来对参照表中某些列（外键）的取值进行限定或约束。
+
+ON DELETE 或 ON UPDATE 指定参照动作相关的 SQL 语句，这里可为每个外键指定的参照动作分别对应于 DELETE 语句和 UPDATE 语句。
+
+reference_option 指定参照完整性约束的实现策略，默认为RESTRICT。具体策略如下：
+
+RESTRICT 表示限制策略，即当要删除或更新被参照表中被参照列上（的值），并在外键中出现的值时，系统拒绝对被参照表的删除或更新操作。；
+
+CASCADE 表示级联策略，即从被参照表中删除或更新记录行时，自动删除或更新参照表中匹配的记录行；
+
+SET NULL 表示置空策略，即当从被参照表中删除或更新记录行时，设置参照表中与之对应的外键列的值为 NULL，这个策略需要被参照表中的外键列没有声明限定词 NOT NULL；
+
+NO ACTION 表示不采取实施策略，即当一个相关的外键值在被参照表中时，删除或更新被参照表中键值的动作不被允许，该策略的动作语义与 RESTRICT 相同。
+
+当指定一个外键时：
+
+1、被参照表必须已经用一条 CREATE TABLE 语句创建了，或者必须是当前正在创建的表。如若时后一种情形，则被参照表与参照表时同一个表，这样的表称为自参照表（self-referencing table），这种结构称为自参照完整性（self-referential integrity）。
+
+2、必须为被参照表定义主键。
+
+3、必须在被参照表的表名后面指定列名或列名的组合。这个列或列组合必须是这个被参照表的主键或候选键。
+
+4、尽管主键时不能够包含空值的，但允许在外键中出现一个空值。这意味着，只要外键的每个非空值出现在指定的主键中，这个外键的内容就是正确的。
+
+5、外键中的列的数目必须和被参照表的主键中的列的数目相同
+
+6、外键中的列的数据类型必须和被参照表的主键中的对应列的数据类型相同。
+
+### 用户定义的完整性
+
+MySQL支持三种用户自定义完整性约束，分别是非空约束、CHECK 约束 和 触发器。
+
+非空约束 也就是 NOT NULL 不做介绍。
+
+#### CHECK 约束
+
+CHECK 约束事在创建表（CREATE TABLE）或 更新表（ALTER TABLE）的同时，根据用户的实际完整性要求来定义的。它可以分别对列或表实施 CHECK 约束。
+
+语法格式：
+
+```MySQL
+CHECK (expr)
+```
+
+expr 是一个 SQL 表达式，用于指定需要检查的限定条件。在更新表数据时，MySQL会检查更新后的数据行是否满足 CHECK 约束中的限定条件。MySQL 可以使用简单的表达式来实现 CHECK约束，也允许私用复杂的表达式作为限定条件，例如，在限定条件中加入子查询。若将CHECK 约束子句置于表中某个列的定义之后，则这种约束称为基于列的CHECK约束；若将CHECK语句置于表中所有列的定义以及主键约束和外键定义之后，则称为基于表的CHECK 约束，该约束可以同时对表中多个列设置限定条件。
+
+### 对 完整性约束 命名
+
+完整性约束是可以进行添加、删除和修改等操作的。为了删除和修改完整性约束，首先需要在定义约束的同时对其进行命名。命名完整性约束的方法是在各种完整性约束的定义说明之前加上关键字 CONSTRAINT 和该约束的名字。
+
+语法：
+
+```MySQL
+CONSTRAINT [symol]
+```
+
+symbol 是指定的约束名字，这个名字是在完整性约束说明的前面被定义，其在数据库里必须是唯一的。若不明确给出约束的名字，则 MySQL自动创建一个约束名字。
+
+定义完整性约束时，应尽可能地为其指定名字，以便在需要对完整性约束进行修改或删除操作时，可以更加容易地引用它们。
+
+注意：只能给基于表地完整性约束指定名字，而无法给基于列地完整性约束指定名字。因此，基于表地完整性约束必基于列地完整性约束更受欢迎。
+
+### 对 完整性约束 更新
+
+当对各种约束进行命名后，就可以使用 ALTER TABLE 语句来更新与列或表有关的各种约束。例如，若要添加约束，可在ALTER TABLE 语句中使用 ADD CONSTRAINT 子句，实际上这也是定义约束的一种形式。此外，需要注意以下两点。
+
+1、完整性约束不能直接被修改。若要修改某个约束，实际上使用 ALTER TABLE 语句先删除该约束，然后在增加一个与该约束同名的新约束。
+
+2、使用ALTER TABLE 语句，可以独立地删除完整性约束，而不会删除表本身。若使用 DROP TABLE 语句删除一个表，则表中所有的完整性约束都会自动被删除。
+
+## 触发器
+
+触发器（Trigger）是用户**定义在关系表上**的一类由**事件**驱动的数据库对象，也是一种保证数据完整性的方法。
+
+触发器一旦定义，无需用户调用，任何对表的修改操作均由数据库服务器自动激活相应的触发器。
+
+触发器与表的关系十分密切，其主要作用是实现主键和外键不能保证的复杂的参照完整性和数据的一致性，从而有效地保护表中的数据。
+
+### 创建触发器 CREATE TRIGGER 语句
+
+语法：
+
+```MySQL
+CREATE TRIGGER trigger_name trigger_time trigger_event
+    ON tbl_name FOR EACH ROW trigger_body
+```
+
+trigger_name 用于指定触发器的名称，触发器在**当前数据库中**必须具有**唯一的名称**。
+
+trigger_time 用于指定触发器被触发的时刻，有两个选项，即关键字“BEFORE”和关键字“AFTER”，用于表示触发器是在激活它的语句之前还是之后触发。一般验证新数据是否满足使用的限制时使用BEFORE，如果希望在激活触发器的语句执行之后完成几个或更多的改变，通常使用 AFTER 选项。
+
+trigger_event 用于指定触发事件，也就是指定激活触发器的语句的**种类**，可以是以下几种值：
+
+INSERT 表示 在 新的数据行插入到表时 激活 触发器。
+
+UPDATE 表示 更改 表中某一行数据时激活 触发器。
+
+DELETE 表示 从表中删除某一行数据时激活 触发器。
+
+tbl_name 用于指定与触发器相关联的表名，必须引用永久性表，不能将触发器与临时表或视图关联起来，且**同一个表不能拥有两个具有相同触发时刻（BEFORE，AFTER）和事件的触发器**。
+
+FOR EACH ROW 用于指定对于受触发事件影响的每一行都要激活触发器的动作。例如，使用一条INSERT 语句 向一个表中插入多行数据时，触发器会对每一行数据的插入都执行相应的触发器动作。
+
+trigger_body 指定触发器动作**主体**，即包含触发器激活时将要执行的MySQL语句。如果要执行多个语句，可使用BEGIN...END 复合语句结构。
+
+注意：
+
+在触发器的创建中，每个表每个事件每次只允许一个触发器。因此，每个表最多支持6个触发器，即每条 INSERT、UPDATE 和 DELETE 的”之前“与”之后“。单一触发器不能与多个事件或多个表关联，例如，需要一个对INSERT 和 UPDATE 操作执行的触发器，则应该定义两个触发器。
+
+例： 在数据库 mysql_test 的表 customers 中创建一个触发器 customers_insert_trigger，用于每次向表 customers 插入一行数据表，将用于变量 str 的值设置为“one customer added!”
+
+```MySQL
+mysql> CREATE TRIGGER mysql_test.customers_insert_trigger AFTER INSERT
+    ->      ON mysql_test.customers FOR EACH ROW SET @str='one customer added!';
+```
+
+```MySQL
+mysql> INSERT INTO mysql_test.customers
+    -> VALUES(NULL,'万华','F','长沙市','芙蓉区');
+```
+
+最后能用如下方法验证触发器
+
+```Mysql
+mysql> SELECT @str
+```
+
+## 删除触发器
+
+语法：
+
+```MySQL
+DROP TRIGGER [IF EXISTS] [schema_name.]trigger_name
+```
+
+IF EXISTS 用于避免在没有触发器的情况下删除触发器
+
+schema_name 指定触发器所在的数据库的名称，若没有指定，则为当前默认数据库
+
+trigger_name 指定要删除的触发器名称
+
+例： 删除数据库 mysql_test 中的触发器 customers_insert_trigger
+
+```MySQL
+mysql> DROP TRIGGER IF EXISTS mysql_test.customers_insert_trigger;
+```
+
+## 使用触发器
+
+MySQL 所支持的触发器有三种，分别是 INSERT 触发器、 DELETE 触发器和 UPDATE 触发器。
+
+### 1、INSERT 触发器
+
+INSERT 触发器可在 INSERT 语句执行之前或之后之后 执行。
+
+使用该触发器时，需要注意：
+
+1、在 INSERT 触发器 代码内，可引用一个名为 NEW（不区分大小写） 的虚拟表，来访问被插入的行。
+
+2、在 BEFORE ISNERT 触发器中，NEW 中的值也可以被更新，即允许更改被插入的值（只要具有对应的操作权限）
+
+3、对于 AUTO_INCREMENT 列，NEW 在 INSERT 执行之前的值为0，在INSERT 执行之后将包含新的自动生成值。
+
+例： 在数据库 mysql_test 的表 customers 中重新创建触发器 customers_insert_trigger，用于每次向表 customers 插入一行数据时，将用户变量str的值设置为新插入客户的 id 号。
+
+```MySQL
+mysql> CREATE TRIGGER mysql_test.customers_insert_trigger AFTER INSERT
+    -> ON mysql_test.customers FOR EACH ROW SET @str=NEW.cust_id;
+```
+
+### 2、DELETE 触发器
+
+DELETE 触发器可在 DELETE 语句执行之前或之后执行。
+
+使用该触发器时，需要注意：
+
+1、 在DELETE 触发器代码内，可以引用一个名为OLD（不区分大小写）的虚拟表，来访问被删除的行。
+
+2、 OLD 中的值 全部是 **只读** 的，不能被更新。
+
+### 3、UPDATE 触发器
+
+UPDATE 触发器可在 UPDATE 语句执行之前或之后执行。
+
+使用该触发器时，需要注意：
+
+1、在 UPDATE触发器 代码内，可以**引用一个名为OLD的虚拟表访问update语句执行前的值**，也可以**引用一个名为new的虚拟表访问UPDATE语句执行后新更新的值**。
+
+2、在BEFORE UPDATE 触发器中，NEW 中的值可能也被更新，即允许更改 将要用于 UPDATE语句 中的值（只要具有权限）
+
+3、 OLD 中的值 全部是**只读**的，不能被更新。
+
+4、 当触发器涉及对触发表自身的更新操作时，只能使用 BEFORE UPDATE 触发器，而 AFTER UPDATE 触发器将不被允许。
+
+--------------------
+
+## 安全性与访问控制
+
+### 用户账号管理
+
+#### 创建用户账号 CREATE USER
+
+格式：
+
+```MySQL
+CREATE USER user[IDENTIFIED BY [PASSWORD] 'password']
+```
+
+user 指定 创建用户账号，其格式为'user_name'@'host name'。
+
+user_name 表示用户名
+
+host_name 表示主机名 即用户连接MySQL时所在主机的名字。如果在创建的过程中，只给出了账户中的用户名，而没指定主机名，则主机名会默认为是”%“，其表示一组主机。
+
+IDENTIFIED BY 子句是可选项，指定用户账号对应的口令，若该用户账号无口令，则可省略此子句。
+
+PASSWORD 是可选项，用于指定散列口令，即若使用明文设置口令时，需忽略 PASSWORD 关键字；如果不想以明文设置口令，且知道 PASSWORD() 函数返回给密码的散列值，则可以在此口令设置语句中指定此该散列值，但需要加上关键字PASSWORD。
+
+password 指定用户账号的口令，其在 IDENTIFIED BY 关键字 或 PASSWORD 关键字之后。设定的口令值可以是只由字母和数字组成的明文，也可以是通过PASSWORD()函数得到的散列值。
+
+例： 在 MySQL 服务器中添加两个新的用户，其用户名分别为 zhangsan 和 lisi，他们的主机名均为 localhost，用户 zhangsan 的口令设置为明文 123，lisi的口令设置为 明文456.
+
+```MySQL
+mysql> CREATE USER 'ZHANGSAN'@'LOCALHOST' IDENTIFIED BY '123',
+    ->      'LISI'@'LOCALHOST' IDENTIFIED BY '456'
+```
+
+CREATE USER 语句注意事项：
+
+1、要使用 CREATE USER 语句，必须拥有 MySQL 中 mysql 数据库的 INSERT 权限或全局 CREATE USER 权限。
+
+2、使用 CREATE USER 语句创建一个用户账号后，会在系统自身的 mysql 数据库的user 表中台南佳一条新记录。如果创建的账户已经存在，则语句执行会出现错误。
+
+3、如果两个用户具有相同的用户名和不同的主机名，MySQL会将他们视为不同的用户，并允许为这两个用户分配不同的权限集合。
+
+4、如果在 CREATE USER 语句的使用中，没有为用户指定口令，那么 MySQL 允许该用户可以不使用口令登录系统，然而从安全的角度而言，不推荐这种做法。
+
+5、新创建的用户拥有的权限很少。他们可以登录到 MySQL，只允许进行不需要权限的操作，比如使用 SHOW 语句查询所有存储引擎和字符集的列表等，不能使用 USE 语句来让其他用户已经创建了的任何数据库成为当前数据库，因而无法访问那些数据库的表。
+
+#### 删除用户 DROP USER
+
+语法格式：
+
+```MySQL
+DROP USER user [,user] ···
+```
+
+例： 删除用户lisi
+
+```MySQL
+DROP USER lisi@localhost;
+```
+
+DROP USER 语句注意事项:
+
+1、DROP USER 语句可用于删除一个或多个MySQL账户，并消除其权限。
+
+2、要使用 DROP USER 语句，必须拥有 MySQL 中 mysql 数据库的 DELETE 权限或全局 CREATE USER 权限。
+
+3、在 DROP USER 语句的使用中，如果没有明确的给出账户的主机名，则该主机名会默认是 %
+
+4、用户的删除不会影响到他们之前所创建的表、索引或其他数据库对象，这是因为 MySQL 并没有记录是谁创建了这些对象。
+
+#### 修改用户账号 RENAME USER
+
+RENAME USER 可以修改一个或多个已经存在的MySQL用户账号。
+
+语法：
+
+```MySQL
+RENAME USER old_user TO new_user [,old_user TO new_user] ···
+```
+
+old_user 指定系统中已经存在的 MySQL 用户账号
+
+new_user 指定新的MySQL 用户账号
+
+例： 将用户 zhangsan 的名字 修改成 wangwu。
+
+```MySQL
+mysql> RENAME USER 'zhangsan'@'localhost' TO 'wangwu'@'localhost';
+```
+
+RENAME 语句的使用中，需要注意以下几点：
+
+1、RENAME USER 语句用于对原有MySQL账户进行重命名。
+
+2、要使用RENAME 语句，必须拥有MySQL中mysql数据库的 UPDATE 权限 或 全局 CREATE USER 权限。
+
+3、倘若系统中旧帐户不存在或新账户已存在，则语句执行会出现错误。
+
+#### 修改用户口令 SET PASSWORD
+
+SET PASSWORD 语句可以修改一个用户的登录口令。
+
+语法：
+
+```MySQL
+SET PASSWORD [FOR user] =
+    {
+        PASSWORD('new_password')
+        | 'encrypted password'
+    }
+```
+
+FOR 子句为可选项 ，指定与修改口令的用户；
+
+PASSWORD('NEW_PASSWORD') 表示使用函数 PASSWORD() 设置新口令 new_password，即新口令必须加密；
+
+encrypted password 表示已被加密的口令值。
+
+SET PASSWORD 语句 注意事项：
+
+1、若不加上 FOR 子句，表示i需改当前用户的口令；若加上FOR子句，则表示修改账户为user的用户口令，user的格式必须以'user_name'@'host_name'的格式给定。该账户必须在系统中存在，否则语句执行会出现错误。
+
+2、只能使用 PASSWORD('new_password') 和 'encrypted password' 中的一项，且必须使用其中的某一项。
+
+### 账户权限管理
+
+#### 权限的授予
+
+新建的 MySQL用户必须被授权，可以使用 GRANT 语句来实现。
+
+语法：
+
+```MySQL
+GRANT
+  priv_type [(column_list)]  
+    [,priv_type [(column_list)]] ···
+  ON [object_type] priv_level
+  TO user_specification [,user_specification] ···
+  [WITH GRANT OPTION]
+```
+
+priv_type 指定权限的名称 例如 SELECT、UPDATE、DELETE 等数据库操作。
+
+column_list 可选语法项 指定权限要授予给表中哪些具体的列。
+
+ON 子句 指定权限授予的**对象和级别**，例如可在关键字 ON 后面给出要授予权限的数据库名或表名等。
+
+object_type 用来指定**权限授予的对象类型**，包括表、函数和存储过程，分别用关键字 TABLE,FUNCTION,PROCEDURE 表示
+
+priv_level 指定**权限的级别**，其可以授予的权限有这样几个：列权限、表权限、数据库权限和用户权限。
+
+关于权限，在GRANT语句中可用于指定权限级别的值有这样几类格式：
+
+\*    : 当前数据库中的所有表
+
+\*.\*     : 所有数据库中的所有表
+
+db_name.\* :  某个数据库中的所有表， db_name 指定数据库名
+
+db_name.tbl_name : 某个数据库中的某个表或视图 db_name 指定数据库名， tbl_name指定表名或视图名
+
+tbl_name : 表示某个表或视图
+
+db_name.routine_name 表示某个数据库中的某个存储过程或函数
+
+TO 子句 设定用户的口令，以及指定被授予权限的用户 user。 若在 TO 子句中给系统中存在的用户指定口令，则新密码会将原密码覆盖；如果权限被授予给一个不存在的用户，MySQL会**自动执行一条CREATE USER 语句来创建这个用户**，但同时必须为该用户指定口令。由此可见，**GRANT 语句也可以用于创建用户账号**
+
+user_specification 是子句中的具体描述部分，语法格式：
+
+```MySQL
+user[IDENTIFIED BY [PASSWORD] 'password']
+```
+
+WITH 子句 是可选项，用于实现权限的转移或限制。
+
+例： 授予用户 zhangsan 在数据库 mysql_test 的表 customers 上拥有对列 cust_id 和 列cust_name 的 SELECT 权限。
+
+```MySQL
+mysql> GRANT SELECT (cust_id,cust_name)
+    ->      ON mysql_test.customers
+    ->      TO 'zhangsan'@'localhost';
+```
+
+例： 当前系统中不存在用户 liming 和用户 huang，要求创建这两个用户，并设置对应的系统登录口令，同时授予他们在数据库 mysql_test 的表 customers 上拥有 SELECT 和 UPDATE 的权限。
+
+```MySQL
+mysql> GRANT SELECT,UPDATE
+    ->  ON mysql_test.customers
+    ->  TO 'liming'@'localhost' IDENTIFIED BY '123',
+    ->      'huang'@'localhost' IDENTIFIED BY '789';
+```
+
+例： 授予系统中已存在用户 wangwu 可以在数据库 mysql_test 中执行所有数据库操作的权限。
+
+```MySQL
+mysql> GRANT ALL
+    ->  ON mysql_test.*
+    -> TO 'wangwu'@'localhost';
+```
+
+例： 授予系统中已存在用户 wangwu 拥有创建用户的权限。
+
+```MySQL
+mysql> GRANT CREATE USER
+    ->  ON *.*
+    ->  TO 'wangwu'@'localhost'
+```
+
+#### GRANT 语句中语法项“priv_type”注意事项：
+
+1、授予**表权限**时，语法项“priv_type"可以指定为这些值：
+
+SELECT：SELECT语句访问特定表的权限
+
+INSERT：INSERT语句向一个特定表中添加数据行的权限
+
+DELETE：DELETE语句向一个特定表中删除数据行的权限
+
+UPDATE：UPDATE语句修改特定数据表中值的权限
+
+REFERENCES：创建一个外键来参照特定数据表的权限
+
+CREATE：使用特定名字创建一个数据表的权限
+
+ALTER：ALTER TABLE语句修改数据表的权限。
+
+INDEX：在表上定义索引的权限。
+
+DROP：删除数据表的权限
+
+ALL 或 ALL PRIVILEGES：所有的权限名
+
+2、授予**列权限**时，语法项“priv_type”的值只能指定为 SELECT、INSERT 和 UPDATE，同时权限的后面需要加上列名列表 column_list
+
+3、授予**数据库权限**时，语法项“priv_type”的值可以指定为以下值：
+
+SELECT： 对特定数据库中所有表和视图 **SELECT** 的权限
+
+INSERT： 对特定数据库中所有表 **添加数据行** 的权限
+
+DELETE：对特定数据库中所有表的数据行 **删除** 的权限
+
+UPDATE： 对特定数据库中所有数据表的值 **更新（修改）** 的权限
+
+REFERENCES： **创建**指向特定的数据库中的表 **外键** 的权限
+
+CREATE： 在特定数据库中 **创建新表** 的权限
+
+ALTER：特定数据库中 **修改所有数据表** 的权限
+
+INDEX：在特定数据库中的所有表上 **定义和删除索引** 的权限
+
+DROP：特定数据库中所有表和视图的 **删除表和视图** 权限
+
+CREATE TEMPORARY TABLE： 在特定数据库中 **创建临时表** 的权限
+
+CREATE VIEW： 特定数据库中 **创建新的视图** 的权限
+
+SHOW VIEW： 特定数据库中 **查看已有视图的视图定义** 的权限
+
+CREATE ROUTINE： 为特定数据库 **创建存储过程 和 存储函数 等** 权限
+
+ALTER ROUTINE： **更新和删除数据库中已有的存储过程和存储函数**等权限
+
+EXECUTE ROUTINE： **调用**特定数据库的**存储过程和存储函数**的权限
+
+LOCK TABLES： 可以**锁定**特定数据库的**已有数据表**的权限
+
+ALL 或 ALL PRIVILEGES： 以上所有的权限名。
+
+### 权限的转移 WITH 子句
+
+权限的转移可以通过在 GRANKT 语句中使用 WITH 子句来实现。如果将 WITH子句指定为关键字 “WITH GRANT OPTION”，则表示 **TO 子句中**所指定的所有用户都具有**把自己所拥有的权限赋予其他用户的权利**，而无论那些其他用户是否拥有该权限。
+
+例：授予当前系统中一个不存在的用户 zhou 在数据库 mysql_test 的表 customers 上拥有 SELECT 和 UPDATE 的权限，并允许其可以将自身的这个权限授予给其他用户
+
+```MySQL
+mysql> GRANT SELECT,UPDATE
+    ->  ON mysql_test.customers
+    ->  TO 'zhou'@'localhost' IDENTIFIED BY '123'
+    ->  WITH GRANT OPTION
+```
+
+### 权限的撤销 REVOKE
+
+REVOKE 语句可以回收某些特定权限而不删除用户
+
+语法格式：
+
+```MySQL
+REVOKE
+    priv_type [(column_list)]
+        [,priv_type [(column_list)]] ···
+    ON [object_type] priv_level
+    FROM user [,user] ···
+```
+
+当需要收回特定用户的所有权限时，可使用的语法格式是：
+
+```MySQL
+REVOKE ALL PRIVILEGES,GRANT OPTION FROM user [,user] ···
+```
+
+例： 回收系统中已存在的用户 zhou 在数据库 mysql_test 的表 customers 上的 SELECT 权限。
+
+```MySQL
+mysql> REVOKE SELECT
+    ->      ON mysql_test.customers
+    ->      FROM 'ZHOU'@'LOCALHOST';
+```
+
+## 备份
+
+### 备份数据 SELECT INTO...OUTFILE
+
+在MySQL中，导出备份语句 SELECT INTO...OUTFILE 是通过 SELECT 语句将表中所有数据行写入到一个文件中。
+
+语法：
+
+```MySQL
+SELECT *INTO OUTFILE 'file_name' export_options
+    | INTO DUMPFILE 'file_name'
+```
+
+其中，语法项 “export_options”的格式是：
+
+```MySQL
+[FIELDS
+        [TERMINATED BY 'string']
+        [[OPTIONALLY] ENCLOSED BY 'char']
+        [ESCAPED BY 'char']
+]
+[LINES TERMINATED BY 'string']
+```
+
+file_name 指定数据备份文件的名称。 文件默认在服务器主机上创建，并且文件名不能是已经存在的，否则可能会将源文件覆盖。如果要将该文件写入到一个特定的位置，则要在文件名前加上具体的路径。在文件中，导出的数据行会以一定的形式存储，其中空值是用 “\N” 表示。
+
+导出语句中使用关键字 OUTFILE 时，可以在语法项 export_options 中加入以下两个自选的子句，即 FIELDS 子句 和 LINES 子句，它们的作用是决定数据行在备份文件中存储的格式。如果 FIELDS 和 LINES 子句都不指定，则默认声明的是子句 “FIELDS TERMINATED BY '\T' ENCLOSED BY " ESCAPED BY '\\n'”
+
+FIELDS 子句中有三个亚子句，分别是 “TERMINATED BY 子句” “[OPTIONALLY] ENCLOSED BY子句” 和 “ESCAPED BY 子句”。如果指定了 FIELDS 子句，则这三个亚子句中至少要指定一个。其中， TERMINATED BY 子句用来指定字段值之间的符号，例如 “TERMINATED BY ','” 指定逗号作为两个字段值之间的表只； ENCLOSED BY 子句用来指定包裹文件中字符值放在双引号之间，若加上关键字“OPTIONALLY”则表示所有的值都放在双引号之间；ESCAPED BY 子句用来指定转义字符，例如 “ESCAPED BY '\*'” 将 “\*” 指定为转义字符，取代“\\”，如空格将表示为 “*N”。
+
+在 LINES 子句中 使用关键字 “TERMINATED BY” 指定一个数据行结束的标志，如 “LINES TERMINATED BY '?'” 表示一个数据行以 ？ 作为结束标志。
+
+导出语句中使用的是关键字“DUMPFILE”，而非 “OUTFILE” 时，导出的备份文件里面所有的数据行都会彼此紧挨着放置，即 值 和 行 之间没有任何标记。
+
+使用 LOAD DATE···INFILE 语句恢复数据
+
+```MySQL
+LOAD DATA INFILE 'file_name.txt'
+    INTO TABLE tbl_name
+    [FIELDS
+        [TERMINATED BY 'string']
+        [[OPTIONALLY] ENCLOSED BY 'char']
+        [ESCAPED BY 'char']
+    ]
+    [LINES
+        [STARTING BY 'string']
+        [TERMINATED BY 'string']
+    ]
+```
+
+file_name 指定待导入的数据库备份文件，文件中保存了待载入数据库的所有数据行。输入文件可以手动创建，也可以使用使用其他的程序创建。导入文件时可以指定文件的绝对路径，则服务器会根据该路径搜索文件；若不指定路径，则服务器在默认数据库的数据库目录中读取。
+
+tb_name 指定需要导入数据的表名，该表在数据库中必须存在，表结构必须与导入文件的数据行一致。
+
+此处的 FIELDS 子句 和 SELECT···INTO OUTFILE 语句中的 FIELDS 子句类似，用于判断字段之间和数据行之间的符号。
+
+LINES 子句中的 TERMINATED BY 亚子句用来指定一行结束的标志； STARTING BY 亚子句则指定一个前缀，导入数据行时，忽略数据行中的该前缀和前缀之前的内容。弱国某行不包括该前缀，则整个数据行被跳过。
+
+例： 备份数据库 mysql_test 中表 customres 的全部数据到 C 盘 的 BACKUP 目录下一个名为 backupfile.txt 的文件中，要求字段值如果是字符则用双引号标注，字段值之间用逗号隔开，每行以问号为结束标志。然后，将备份后的数据导入到一个和 customers 表结构相同的空表 customers_copy 中。
+
+```MySQL
+mysql> SELECT * FROM mysql_test.customers
+    -> INTO OUTFILE 'C:/BACKUP/backupfile.txt'
+    -> FIELDS TERMINATED BY ','
+    -> OPTIONALLY ENCLOSED BY ""
+    -> LINES TERMINATED BY '?';
+```
+
+然后，将备份的数据导入到数据库 mysql_test 中要给和 Customers 表结构相同的空表 customers_copy 中：
+
+```MySQL
+mysql> LOAD DATA INFILE 'C:/BACKUP/backupfile.txt'
+    -> INTO TABLE mysql_test.customers_copy
+    -> FIELDS TERMINATED BY ','
+    -> OPTIONALLY ENCLOSED BY ""
+    -> LINES TERMINATED BY '?';
+```
+
+在导入数据时需要特别注意：
+
+必须根据数据备份文件中数据行的格式来指定判断的符号。例如，在 backupfile.txt 文件中字段值是以逗号隔开的，导入数据时就一定要使用 “TERMINATED BY ','”子句指定逗号为字段值之间的分隔符，即与 SELECT ··· INTO OUTFILE 语句相对应。
+
+另外需要注意：
+
+在多个用户同时使用 MySQL 数据库的情况下，为了得到一个一致的备份，需要在指定的表上使用 LOCK TABLES table_name READ 语句做一个读锁定，以防止在备份过程中表被其他用户更新；而当恢复数据时，则需要使用 LOCK TABLES table_name WRITE 语句做一个写锁定，以避免发生数据冲突。在数据库备份或恢复完毕之后需要使用 UNLOCK TABLES 语句对该表进行解锁。
 
 
 
